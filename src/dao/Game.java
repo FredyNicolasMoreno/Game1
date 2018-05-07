@@ -26,7 +26,7 @@ public class Game extends GameThread{
 	
 	@Override
 	public void executeTask() {
-//		chasePlayer();
+		chasePlayer();
 		moveShoot();
 	}
 	
