@@ -1,9 +1,11 @@
 package controller;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import javax.xml.crypto.dsig.keyinfo.KeyValue;
+import javax.swing.Timer;
 
 import dao.Game;
 import views.GameGraphics;
@@ -16,15 +18,20 @@ public class Control implements KeyListener{
 	private Game game;
 	
 	public Control() {
-		game = new Game();
-		mainWindow = new MainWindow(this, game.getEnemy(), game.getPlayer());
-//		setEntities();
+		game = new Game(550);
+		mainWindow = new MainWindow(this, game.getEnemy(), game.getPlayer(), game.getGun());
+		mainWindow.bullets(game.getBullets());
+		Timer timer = new Timer(5, new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				mainWindow.setEnemyPosition(game.getEnemy());
+				mainWindow.rePaint();
+				mainWindow.catched();
+			}
+		});
+		timer.start();
 	}
-
-//	private void setEntities() {
-//		gameGraphics.setPlayerRect(game.getPlayer());
-//		gameGraphics.setEnemyRect(game.getEnemy());
-//	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -42,24 +49,28 @@ public class Control implements KeyListener{
 		case KeyEvent.VK_RIGHT:
 			moveRight();
 			break;
-			
+		case KeyEvent.VK_SPACE:
+			shoot();
+			break;
 		default:
 			break;
 		}
 	}
 
+
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 	
+	private void shoot() {
+		game.addBullet();
+	}
 	
 	public void moveUp() {
 		game.moveUp();
